@@ -1,8 +1,21 @@
-﻿using DesignPatterns_C_.Singleton;
+﻿using DesignPatterns_C_.FactoryPattern;
+using DesignPatterns_C_.Singleton;
 
 //Singleton
-var singleton = Singleton.Instance;
+//var singleton = Singleton.Instance;
 
-var log = Log.Instance;
-log.Save("Test 1");
-log.Save("Test 2");
+//var log = Log.Instance;
+//log.Save("Test 1");
+//log.Save("Test 2");
+
+//Factory
+SaleFactory storeSaleFactory = new StoreSaleFactory(10);
+SaleFactory internetSaleFactory = new InternetSaleFactory(10);
+
+ISale sale1 = storeSaleFactory.GetSale();
+sale1.Sell(15);
+
+ISale sale2 = internetSaleFactory.GetSale();
+sale2.Sell(15);
+
+
