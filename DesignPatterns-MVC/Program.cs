@@ -1,4 +1,7 @@
+using DesignPatterns.Models.Data;
+using DesignPatterns.Repository;
 using DesignPatterns_MVC.Configuration;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Tools.Earn;
 
@@ -22,6 +25,13 @@ builder.Services.AddTransient((factory) =>
         configuration
         .GetSection("MyConfig").GetValue<decimal>("Extra"));
 });
+
+builder.Services.AddDbContext<DesignPatternsContext>(options =>
+{
+    options.UseSqlServer(configuration.GetConnectionString("Connection"));
+});
+
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 

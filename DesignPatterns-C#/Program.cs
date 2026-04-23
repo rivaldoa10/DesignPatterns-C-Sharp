@@ -1,6 +1,8 @@
-﻿using DesignPatterns_C_.DependencyInjectionPattern;
-using DesignPatterns_C_.FactoryPattern;
-using DesignPatterns_C_.Singleton;
+﻿//using DesignPatterns_C_.DependencyInjectionPattern;
+//using DesignPatterns_C_.FactoryPattern;
+using DesignPatterns_C_.Models;
+using DesignPatterns_C_.RepositoryPattern;
+//using DesignPatterns_C_.Singleton;
 
 //Singleton
 //var singleton = Singleton.Instance;
@@ -20,8 +22,57 @@ using DesignPatterns_C_.Singleton;
 //sale2.Sell(15
 
 //Dependency Injection
-var beer = new Beer("Toña", "Toña", 1);
-var drinkWithBeer = new DrinkWithBeer(10, 1, beer);
-drinkWithBeer.Build();
+//var beer = new Beer("Toña", "Toña", 1);
+//var drinkWithBeer = new DrinkWithBeer(10, 1, beer);
+//drinkWithBeer.Build();
 
+
+//Repository con Entity
+//using (var context = new DesignPatternsContext())
+//{
+//    var beerRepository = new BeerRepository(context);
+//    var newBeer = new Beer();
+
+//    newBeer.Name = "Corona";
+//    newBeer.Style = "Corona";
+
+//    beerRepository.Add(newBeer);
+//    beerRepository.Save();
+
+//    foreach (var beer in beerRepository.Get())
+//    {
+//        Console.WriteLine(beer.Name);
+//    }
+//}
+
+//Repository con Entity Generic
+using (var context = new DesignPatternsContext())
+{
+    var beerRepository = new Repository<Beer>(context);
+    var newBeer = new Beer();
+
+    newBeer.Name = "Corona";
+    newBeer.Style = "Corona";
+
+    beerRepository.Add(newBeer);
+    beerRepository.Save();
+
+    foreach (var beer in beerRepository.Get())
+    {
+        Console.WriteLine(beer.Name);
+    }
+
+    var brandRepository = new Repository<Brand>(context);
+    var newBrand = new Brand();
+
+    newBrand.Name = "Fuller";
+
+    brandRepository.Add(newBrand);
+    brandRepository.Save();
+
+    foreach (var brand in brandRepository.Get())
+    {
+        Console.WriteLine(brand.Name);
+    }
+}
 
