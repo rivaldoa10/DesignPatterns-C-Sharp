@@ -2,6 +2,7 @@
 //using DesignPatterns_C_.FactoryPattern;
 using DesignPatterns_C_.Models;
 using DesignPatterns_C_.RepositoryPattern;
+using DesignPatterns_C_.UnitOfWorkPattern;
 //using DesignPatterns_C_.Singleton;
 
 //Singleton
@@ -46,33 +47,59 @@ using DesignPatterns_C_.RepositoryPattern;
 //}
 
 //Repository con Entity Generic
+//using (var context = new DesignPatternsContext())
+//{
+//    var beerRepository = new Repository<Beer>(context);
+//    var newBeer = new Beer();
+
+//    newBeer.Name = "Corona";
+//    newBeer.Style = "Corona";
+
+//    beerRepository.Add(newBeer);
+//    beerRepository.Save();
+
+//    foreach (var beer in beerRepository.Get())
+//    {
+//        Console.WriteLine(beer.Name);
+//    }
+
+//    var brandRepository = new Repository<Brand>(context);
+//    var newBrand = new Brand();
+
+//    newBrand.Name = "Fuller";
+
+//    brandRepository.Add(newBrand);
+//    brandRepository.Save();
+
+//    foreach (var brand in brandRepository.Get())
+//    {
+//        Console.WriteLine(brand.Name);
+//    }
+//}
+
+//UnitOfWork
 using (var context = new DesignPatternsContext())
 {
-    var beerRepository = new Repository<Beer>(context);
-    var newBeer = new Beer();
+    var unitOfWork = new UnitOfWork(context);
 
-    newBeer.Name = "Corona";
-    newBeer.Style = "Corona";
-
-    beerRepository.Add(newBeer);
-    beerRepository.Save();
-
-    foreach (var beer in beerRepository.Get())
+    var beers = unitOfWork.Beers;
+    var beer = new Beer()
     {
-        Console.WriteLine(beer.Name);
-    }
+        Name = "Spark Hard Seltzer ",
+        Style = "Spark Hard Seltzer "
+    };
 
-    var brandRepository = new Repository<Brand>(context);
-    var newBrand = new Brand();
+    beers.Add(beer);
 
-    newBrand.Name = "Fuller";
+    var brands = unitOfWork.Brands;
 
-    brandRepository.Add(newBrand);
-    brandRepository.Save();
-
-    foreach (var brand in brandRepository.Get())
+    var brand = new Brand()
     {
-        Console.WriteLine(brand.Name);
-    }
+        Name= "Flor de Caña"
+    };
+
+    brands.Add(brand);
+
+    unitOfWork.Save();
 }
 
