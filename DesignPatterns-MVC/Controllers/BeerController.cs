@@ -1,6 +1,7 @@
 ﻿using DesignPatterns.Models.Data;
 using DesignPatterns.Repository;
 using DesignPatterns_MVC.Models.ViewModels;
+using DesignPatterns_MVC.Strategies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -30,8 +31,7 @@ namespace DesignPatterns_MVC.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            var brands = _unitOfWork.Brands.Get();
-            ViewBag.Brands = new SelectList(brands, "BrandId", "Name");
+            GetBrandsData();
             return View();
         }
 
@@ -40,32 +40,24 @@ namespace DesignPatterns_MVC.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var brands = _unitOfWork.Brands.Get();
-                ViewBag.Brands = new SelectList(brands, "BrandId", "Name");
+                GetBrandsData();
                 return View("Add", beerVM);
             }
 
-            var beer = new Beer();
-            beer.Name = beerVM.Name;
-            beer.Style = beerVM.Style;
-
-            if (beerVM.BrandId == Guid.Empty)
-            {
-                var brand = new Brand();
-                brand.Name = beerVM.OtherBrand;
-                brand.BrandId = Guid.NewGuid();
-                beer.BrandId = brand.BrandId;
-
-                _unitOfWork.Brands.Add(brand);
-            }
-            else                 
-            {
-                beer.BrandId = (Guid)beerVM.BrandId;
-            }
-            _unitOfWork.Beers.Add(beer);
-            _unitOfWork.Save();
+            var context = beerVM.BrandId == null ?
+                            new BeerContext(new BeerWithBrandStrategy()) :
+                            new BeerContext(new BeerStrategy());
+            context.Add(beerVM, _unitOfWork);
 
             return RedirectToAction("Index");
         }
+
+        #region HELPERS
+        private void GetBrandsData()
+        {
+            var brands = _unitOfWork.Brands.Get();
+            ViewBag.Brands = new SelectList(brands, "BrandId", "Name");
+        }
+        #endregion
     }
 }

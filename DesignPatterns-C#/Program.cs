@@ -2,6 +2,7 @@
 //using DesignPatterns_C_.FactoryPattern;
 using DesignPatterns_C_.Models;
 using DesignPatterns_C_.RepositoryPattern;
+using DesignPatterns_C_.StrategyPattern;
 using DesignPatterns_C_.UnitOfWorkPattern;
 //using DesignPatterns_C_.Singleton;
 
@@ -78,28 +79,35 @@ using DesignPatterns_C_.UnitOfWorkPattern;
 //}
 
 //UnitOfWork
-using (var context = new DesignPatternsContext())
-{
-    var unitOfWork = new UnitOfWork(context);
+//using (var context = new DesignPatternsContext())
+//{
+//    var unitOfWork = new UnitOfWork(context);
 
-    var beers = unitOfWork.Beers;
-    var beer = new Beer()
-    {
-        Name = "Spark Hard Seltzer ",
-        Style = "Spark Hard Seltzer "
-    };
+//    var beers = unitOfWork.Beers;
+//    var beer = new Beer()
+//    {
+//        Name = "Spark Hard Seltzer ",
+//        Style = "Spark Hard Seltzer "
+//    };
 
-    beers.Add(beer);
+//    beers.Add(beer);
 
-    var brands = unitOfWork.Brands;
+//    var brands = unitOfWork.Brands;
 
-    var brand = new Brand()
-    {
-        Name= "Flor de Caña"
-    };
+//    var brand = new Brand()
+//    {
+//        Name= "Flor de Caña"
+//    };
 
-    brands.Add(brand);
+//    brands.Add(brand);
 
-    unitOfWork.Save();
-}
+//    unitOfWork.Save();
+//}
 
+//Strategy
+var context = new Context(new CarStrategy());
+context.Run();
+context.Strategy = new MotoStrategy();
+context.Run();
+context.Strategy = new BicycleStrategy();
+context.Run();
